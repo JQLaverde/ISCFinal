@@ -122,7 +122,7 @@ class Fecha():
             fechaNueva.hora -= 24
             fechaNueva.dia += 1
 
-            while fechaNueva.dia > numeroDiasMesActual:
+            if fechaNueva.dia > numeroDiasMesActual:
                 fechaNueva.dia -= numeroDiasMesActual
                 fechaNueva.mes += 1
 
@@ -132,6 +132,65 @@ class Fecha():
                     fechaNueva.comprobarBisciesto()
 
             numeroDiasMesActual = fechaNueva.__numeroDiasMes[fechaNueva.mes]
+
+
+        return fechaNueva
+
+    def sumarMinutos(self, numeroMinutos):
+        fechaNueva = Fecha((self.ano, self.mes, self.dia,
+                            self.hora, self.minutos, self.segundos))
+        fechaNueva.minutos += numeroMinutos
+        numeroDiasMesActual = fechaNueva.__numeroDiasMes[fechaNueva.mes]
+
+        while fechaNueva.minutos > 59:
+            fechaNueva.minutos -= 60
+            fechaNueva.hora += 1
+
+            if fechaNueva.hora > 23:
+                fechaNueva.hora -= 24
+                fechaNueva.dia += 1
+
+                if fechaNueva.dia > numeroDiasMesActual:
+                    fechaNueva.dia -= numeroDiasMesActual
+                    fechaNueva.mes += 1
+
+                    if fechaNueva.mes > 12:
+                        fechaNueva.mes = 1
+                        fechaNueva.ano += 1
+                        fechaNueva.comprobarBisciesto()
+
+                numeroDiasMesActual = fechaNueva.__numeroDiasMes[fechaNueva.mes]
+
+        return fechaNueva
+
+    def sumarSegundos(self, numeroSegundos):
+        fechaNueva = Fecha((self.ano, self.mes, self.dia,
+                            self.hora, self.minutos, self.segundos))
+        fechaNueva.segundos += numeroSegundos
+        numeroDiasMesActual = fechaNueva.__numeroDiasMes[fechaNueva.mes]
+
+        while fechaNueva.segundos > 59:
+            fechaNueva.segundos -= 60
+            fechaNueva.minutos += 1
+
+            if fechaNueva.minutos > 59:
+                fechaNueva.minutos -= 60
+                fechaNueva.hora += 1
+
+                if fechaNueva.hora > 23:
+                    fechaNueva.hora -= 24
+                    fechaNueva.dia += 1
+
+                    if fechaNueva.dia > numeroDiasMesActual:
+                        fechaNueva.dia -= numeroDiasMesActual
+                        fechaNueva.mes += 1
+
+                        if fechaNueva.mes > 12:
+                            fechaNueva.mes = 1
+                            fechaNueva.ano += 1
+                            fechaNueva.comprobarBisciesto()
+
+                    numeroDiasMesActual = fechaNueva.__numeroDiasMes[fechaNueva.mes]
 
 
         return fechaNueva
