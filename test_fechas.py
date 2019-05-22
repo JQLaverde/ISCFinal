@@ -86,10 +86,15 @@ class PruebasFechas(unittest.TestCase):
             return True
         raise AssertionError("No esta verificando los segundos")
 
-    def test_compara_fechas(self):
+    def test_compara_fechas_true(self):
         fechaInicial = fechas.Fecha((2019, 3, 5, 5, 5, 5))
         fechaCompara = fechas.Fecha((2019, 3, 5, 5, 5, 5))
         self.assertTrue(fechaInicial == fechaCompara)
+
+    def test_compara_fechas_false(self):
+        fechaInicial = fechas.Fecha((2019, 3, 5, 5, 5, 5))
+        fechaCompara = fechas.Fecha((2019, 3, 5, 6, 5, 5))
+        self.assertFalse(fechaInicial == fechaCompara)
 
     def test_suma_anos(self):
         fecha = fechas.Fecha((2019, 5, 19))
@@ -111,7 +116,83 @@ class PruebasFechas(unittest.TestCase):
         fechaNueva = fecha.sumarMeses(27)
         self.assertTrue(fechaNueva == fechas.Fecha((2021, 8, 19)))
 
-    
+    def test_sumar_pocos_dias(self):
+        fecha = fechas.Fecha((2019, 5, 22))
+        fechaNueva = fecha.sumarDias(5)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 5, 27)))
+
+    def test_sumar_dias_pasando_mes(self):
+        fecha = fechas.Fecha((2019, 5, 22))
+        fechaNueva = fecha.sumarDias(15)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 6, 6)))
+
+    def test_sumar_dias_pasando_meses(self):
+        fecha = fechas.Fecha((2019, 5, 22))
+        fechaNueva = fecha.sumarDias(45)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 7, 6)))
+
+    def test_sumar_dias_pasando_anos(self):
+        fecha = fechas.Fecha((2018, 5, 22))
+        fechaNueva = fecha.sumarDias(365)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 5, 22)))
+
+    def test_29_febrero(self):
+        try:
+            fechas.Fecha((2020, 2, 29))
+        except ValueError:
+            raise AssertionError("No esta reconociendo bisciestos")
+
+    def test_suma_dias_pasando_mes_ano_bisciesto(self):
+        fecha = fechas.Fecha((2020, 2, 20))
+        fechaNueva = fecha.sumarDias(20)
+        self.assertTrue(fechaNueva == fechas.Fecha((2020, 3, 11)))
+
+    def test_suma_dias_pasando_ano_bisciesto(self):
+        fecha = fechas.Fecha((2019, 3, 5))
+        fechaNueva = fecha.sumarDias(365)
+        self.assertTrue(fechaNueva == fechas.Fecha((2020, 3, 4)))
+
+    def test_sumar_pocas_horas(self):
+        fecha = fechas.Fecha((2019, 3, 5))
+        fechaNueva = fecha.sumarHoras(10)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 10, 0, 0)))
+
+    def test_sumar_horas_pasando_dia(self):
+        fecha = fechas.Fecha((2019, 3, 5, 23, 0, 0))
+        fechaNueva = fecha.sumarHoras(24)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 6, 23, 0, 0)))
+
+    def test_sumar_horas_pasando_dias(self):
+        fecha = fechas.Fecha((2019, 3, 5, 23, 0, 0))
+        fechaNueva = fecha.sumarHoras(32)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 7, 7, 0, 0)))
+
+    def test_sumar_horas_pasando_mes(self):
+        fecha = fechas.Fecha((2019, 5, 22))
+        fechaNueva = fecha.sumarHoras(245)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 6, 1, 5, 0, 0)))
+
+    def test_sumar_horas_pasando_meses(self):
+        fecha = fechas.Fecha((2019, 5, 22))
+        fechaNueva = fecha.sumarHoras(984)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 7, 2, 0, 0, 0)))
+
+    def test_sumar_horas_pasando_anos(self):
+        fecha = fechas.Fecha((2019, 12, 27))
+        fechaNueva = fecha.sumarHoras(120)
+        self.assertTrue(fechaNueva == fechas.Fecha((2020, 1, 1, 0, 0, 0)))
+
+    def test_sumar_horas_pasando_mes_ano_bisciesto(self):
+        fecha = fechas.Fecha((2020, 2, 20))
+        fechaNueva = fecha.sumarHoras(240)
+        self.assertTrue(fechaNueva == fechas.Fecha((2020, 3, 1)))
+
+    def test_suma_horas_pasando_ano_bisciesto(self):
+        fecha = fechas.Fecha((2019, 12, 27))
+        fechaNueva = fecha.sumarHoras(1560)
+        self.assertTrue(fechaNueva == fechas.Fecha((2020, 3, 1)))
+
+
 
 if __name__=='__main__':
     unittest.main()
