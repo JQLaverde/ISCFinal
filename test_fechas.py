@@ -16,6 +16,13 @@ class PruebasFechas(unittest.TestCase):
             raise AssertionError("La clase fecha no esta definida")
         return True
 
+    def test_comprobar_cantidad_parametros(self):
+        try:
+            fechas.Fecha((2019, 5, 21, 23))
+        except ValueError:
+            return True
+        raise AssertionError("No esta verificando parametros")
+
     def test_atributos_obligatorios(self):
         fecha = fechas.Fecha((2019, 5, 21))
         self.assertEqual(fecha.ano, 2019)
@@ -301,6 +308,207 @@ class PruebasFechas(unittest.TestCase):
         fecha = fechas.Fecha((2019, 12, 27))
         fechaNueva = fecha.sumarSegundos(5616001)
         self.assertTrue(fechaNueva == fechas.Fecha((2020, 3, 1, 0, 0, 1)))
+
+    def test_restar_anos(self):
+        fecha = fechas.Fecha((2019, 5, 19))
+        fechaNueva = fecha.restarAnos(1)
+        self.assertTrue(fechaNueva == fechas.Fecha((2018, 5, 19)))
+
+    def test_restar_pocos_meses(self):
+        fecha = fechas.Fecha((2019, 5, 19))
+        fechaNueva = fecha.restarMeses(4)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 1, 19)))
+
+    def test_restar_meses_pasando_ano(self):
+        fecha = fechas.Fecha((2019, 5, 19))
+        fechaNueva = fecha.restarMeses(12)
+        self.assertTrue(fechaNueva == fechas.Fecha((2018, 5, 19)))
+
+    def test_restar_meses_pasando_anos(self):
+        fecha = fechas.Fecha((2019, 5, 19))
+        fechaNueva = fecha.restarMeses(27)
+        self.assertTrue(fechaNueva == fechas.Fecha((2017, 2, 19)))
+
+    def test_restar_pocos_dias(self):
+        fecha = fechas.Fecha((2019, 5, 22))
+        fechaNueva = fecha.restarDias(5)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 5, 17)))
+
+    def test_restar_dias_pasando_mes(self):
+        fecha = fechas.Fecha((2019, 5, 22))
+        fechaNueva = fecha.restarDias(25)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 4, 27)))
+
+    def test_restar_dias_pasando_meses(self):
+        fecha = fechas.Fecha((2019, 5, 22))
+        fechaNueva = fecha.restarDias(55)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 28)))
+
+    def test_restar_dias_pasando_anos(self):
+        fecha = fechas.Fecha((2019, 5, 22))
+        fechaNueva = fecha.restarDias(365)
+        self.assertTrue(fechaNueva == fechas.Fecha((2018, 5, 22)))
+
+    def test_restar_dias_pasando_mes_ano_bisciesto(self):
+        fecha = fechas.Fecha((2020, 3, 11))
+        fechaNueva = fecha.restarDias(20)
+        self.assertTrue(fechaNueva == fechas.Fecha((2020, 2, 20)))
+
+    def test_restar_dias_pasando_ano_bisciesto(self):
+        fecha = fechas.Fecha((2020, 3, 4))
+        fechaNueva = fecha.restarDias(365)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5)))
+
+    def test_restar_pocas_horas(self):
+        fecha = fechas.Fecha((2019, 3, 5, 10, 0, 0))
+        fechaNueva = fecha.restarHoras(10)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_horas_pasando_dia(self):
+        fecha = fechas.Fecha((2019, 3, 6, 23, 0, 0))
+        fechaNueva = fecha.restarHoras(24)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 23, 0, 0)))
+
+    def test_restar_horas_pasando_dias(self):
+        fecha = fechas.Fecha((2019, 3, 7, 7, 0, 0))
+        fechaNueva = fecha.restarHoras(32)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 23, 0, 0)))
+
+    def test_restar_horas_pasando_mes(self):
+        fecha = fechas.Fecha((2019, 6, 1, 5, 0, 0))
+        fechaNueva = fecha.restarHoras(245)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 5, 22, 0, 0, 0)))
+
+    def test_restar_horas_pasando_meses(self):
+        fecha = fechas.Fecha((2019, 7, 2, 0, 0, 0))
+        fechaNueva = fecha.restarHoras(984)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 5, 22, 0, 0, 0)))
+
+    def test_restar_horas_pasando_anos(self):
+        fecha = fechas.Fecha((2020, 1, 1, 0, 0, 0))
+        fechaNueva = fecha.restarHoras(120)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 12, 27, 0, 0, 0)))
+
+    def test_restar_horas_pasando_mes_ano_bisciesto(self):
+        fecha = fechas.Fecha((2020, 3, 1, 0, 0, 0))
+        fechaNueva = fecha.restarHoras(240)
+        self.assertTrue(fechaNueva == fechas.Fecha((2020, 2, 20, 0, 0, 0)))
+
+    def test_restar_horas_pasando_ano_bisciesto(self):
+        fecha = fechas.Fecha((2020, 3, 1, 0, 0, 0))
+        fechaNueva = fecha.restarHoras(1560)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 12, 27, 0, 0, 0)))
+
+    def test_restar_pocos_minutos(self):
+        fecha = fechas.Fecha((2019, 3, 5, 0, 10, 0))
+        fechaNueva = fecha.restarMinutos(10)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5)))
+
+    def test_restar_minutos_pasando_hora(self):
+        fecha = fechas.Fecha((2019, 3, 5, 1, 1, 0))
+        fechaNueva = fecha.restarMinutos(61)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_minutos_pasando_horas(self):
+        fecha = fechas.Fecha((2019, 3, 5, 3, 1, 0))
+        fechaNueva = fecha.restarMinutos(181)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_minutos_pasando_dia(self):
+          fecha = fechas.Fecha((2019, 3, 6, 0, 1, 0))
+          fechaNueva = fecha.restarMinutos(1441)
+          self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_minutos_pasando_dias(self):
+        fecha = fechas.Fecha((2019, 3, 7, 0, 1, 0))
+        fechaNueva = fecha.restarMinutos(2881)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_minutos_pasando_mes(self):
+        fecha = fechas.Fecha((2019, 4, 5, 0, 1, 0))
+        fechaNueva = fecha.restarMinutos(44641)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_minutos_pasando_meses(self):
+        fecha = fechas.Fecha((2019, 5, 6, 0, 1, 0))
+        fechaNueva = fecha.restarMinutos(89281)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_minutos_pasando_anos(self):
+        fecha = fechas.Fecha((2020, 1, 1, 0, 1, 0))
+        fechaNueva = fecha.restarMinutos(7201)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 12, 27)))
+
+    def test_restar_minutos_pasando_mes_ano_bisciesto(self):
+        fecha = fechas.Fecha((2020, 3, 1, 0, 1, 0))
+        fechaNueva = fecha.restarMinutos(14401)
+        self.assertTrue(fechaNueva == fechas.Fecha((2020, 2, 20)))
+
+    def test_restar_minutos_pasando_ano_bisciesto(self):
+        fecha = fechas.Fecha((2020, 3, 1, 0, 1, 0))
+        fechaNueva = fecha.restarMinutos(93601)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 12, 27)))
+
+    def test_restar_pocos_segundos(self):
+        fecha = fechas.Fecha((2019, 3, 5, 0, 0, 10))
+        fechaNueva = fecha.restarSegundos(10)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5)))
+
+    def test_restar_segundos_pasando_minuto(self):
+        fecha = fechas.Fecha((2019, 3, 5, 0, 1, 1))
+        fechaNueva = fecha.restarSegundos(61)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_segundos_pasando_minutos(self):
+        fecha = fechas.Fecha((2019, 3, 5, 0, 5, 1))
+        fechaNueva = fecha.restarSegundos(301)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_segundos_pasando_hora(self):
+        fecha = fechas.Fecha((2019, 3, 5, 1, 0, 1))
+        fechaNueva = fecha.restarSegundos(3601)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_segundos_pasando_horas(self):
+        fecha = fechas.Fecha((2019, 3, 5, 3, 0, 1))
+        fechaNueva = fecha.restarSegundos(10801)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_segundos_pasando_dia(self):
+        fecha = fechas.Fecha((2019, 3, 6, 0, 0, 1))
+        fechaNueva = fecha.restarSegundos(86401)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_segundos_pasando_dias(self):
+        fecha = fechas.Fecha((2019, 3, 7, 0, 0, 1))
+        fechaNueva = fecha.restarSegundos(172801)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_segundos_pasando_mes(self):
+        fecha = fechas.Fecha((2019, 4, 5, 0, 0, 1))
+        fechaNueva = fecha.restarSegundos(2678401)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_segundos_pasando_meses(self):
+        fecha = fechas.Fecha((2019, 5, 6, 0, 0, 1))
+        fechaNueva = fecha.restarSegundos(5356801)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 3, 5, 0, 0, 0)))
+
+    def test_restar_segundos_pasando_anos(self):
+        fecha = fechas.Fecha((2020, 1, 1, 0, 0, 1))
+        fechaNueva = fecha.restarSegundos(432001)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 12, 27)))
+
+    def test_restar_segundos_pasando_mes_ano_bisciesto(self):
+        fecha = fechas.Fecha((2020, 3, 1, 0, 0, 1))
+        fechaNueva = fecha.restarSegundos(864001)
+        self.assertTrue(fechaNueva == fechas.Fecha((2020, 2, 20)))
+
+    def test_restar_segundos_pasando_ano_bisciesto(self):
+        fecha = fechas.Fecha((2020, 3, 1, 0, 0, 1))
+        fechaNueva = fecha.restarSegundos(5616001)
+        self.assertTrue(fechaNueva == fechas.Fecha((2019, 12, 27)))
+
 
 if __name__=='__main__':
     unittest.main()

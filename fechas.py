@@ -21,37 +21,42 @@ class Fecha():
     bisciesto = False
 
     def __init__(self, fecha):
-        self.__numeroDiasMes = [None, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
+        self.__numeroDiasMes = [None, 31, 28, 31, 30, 31, 30, \
+                                      31, 31, 30, 31, 30, 31]
         self.ano = fecha[0]
         self.comprobarBisciesto()
-
-        if fecha[1] < 1 or fecha[1] > 12:
-            raise ValueError("El mes debe estar entre 1 y 12")
-        self.mes = fecha[1]
-
-        if fecha[2] < 1 or fecha[2] > self.__numeroDiasMes[self.mes]:
-            raise ValueError("El dia debe estar entre 1 y %d"\
-                            %(self.__numeroDiasMes[self.mes]))
-        self.dia = fecha[2]
+        self.mes = self.comprobarRangoValor(fecha[1],
+                                            [1, 12],
+                                            "El mes debe estar entre 1 y 12")
+        self.dia = self.comprobarRangoValor(fecha[2],
+                                            [1, self.__numeroDiasMes[self.mes]],
+                                            "El dia debe estar entre 1 y %d"\
+                                            %(self.__numeroDiasMes[self.mes]))
 
         if len(fecha) == 3:
             self.hora = 0
             self.minutos = 0
             self.segundos = 0
+
         elif len(fecha) == 6:
+            self.hora = self.comprobarRangoValor(fecha[3],
+                                            [0, 23],
+                                            "La hora debe estar entre 0 y 23")
+            self.minutos = self.comprobarRangoValor(fecha[4],
+                                        [0, 59],
+                                        "Los minutos debe estar entre 0 y 59")
+            self.segundos = self.comprobarRangoValor(fecha[5],
+                                        [0, 59],
+                                        "Los segundos debe estar entre 0 y 59")
 
-            if fecha[3] < 0 or fecha[3] > 23:
-                raise ValueError("La hora debe estar entre 0 y 23")
-            self.hora = fecha[3]
+        else:
+            raise ValueError("Entrada debe ser (año, mes, dia)\
+                                    o (año, mes, dia, hora, minutos, segundos)")
 
-            if fecha[4] < 0 or fecha[4] > 59:
-                raise ValueError("Los minutos debe estar entre 0 y 59")
-            self.minutos = fecha[4]
-
-            if fecha[5] < 0 or fecha[5] > 59:
-                raise ValueError("Los segundos debe estar entre 0 y 59")
-            self.segundos = fecha[5]
+    def comprobarRangoValor(self, valor, limites, mensaje):
+        if valor < limites[0] or valor > limites[1]:
+            raise ValueError(mensaje)
+        return valor
 
     def comprobarBisciesto(self):
         if (self.ano % 4) == 0 and (self.ano % 400) != 0 :
@@ -81,6 +86,13 @@ class Fecha():
         fechaNueva.comprobarBisciesto()
         return fechaNueva
 
+    def restarAnos(self, numeroAnos):
+        fechaNueva = Fecha((self.ano, self.mes, self.dia,\
+                            self.hora, self.minutos, self.segundos))
+        fechaNueva.ano -= numeroAnos
+        fechaNueva.comprobarBisciesto()
+        return fechaNueva
+
     def sumarMeses(self, numeroMeses):
         fechaNueva = Fecha((self.ano, self.mes, self.dia,\
                             self.hora, self.minutos, self.segundos))
@@ -93,6 +105,62 @@ class Fecha():
 
         return fechaNueva
 
+    def restarMeses(self, numeroMeses):
+        fechaNueva = Fecha((self.ano, self.mes, self.dia,\
+                            self.hora, self.minutos, self.segundos))
+        fechaNueva.mes -= numeroMeses
+
+        while fechaNueva.mes < 1:
+            fechaNueva.mes += 12
+            fechaNueva.ano -= 1
+            fechaNueva.comprobarBisciesto()
+
+        return fechaNueva
+
+    def aumentarAnoMes(self):
+        if self.mes > 12:
+            self.mes = 1
+            self.ano += 1
+            self.comprobarBisciesto()
+
+    def disminuirAnoMes(self):
+        if self.mes < 1:
+            self.mes = 12
+            self.ano -= 1
+            self.comprobarBisciesto()
+
+    def aumentarMesDia(self, numeroDiasMesActual):
+        if self.dia > numeroDiasMesActual:
+            self.dia -= numeroDiasMesActual
+            self.mes += 1
+
+    def disminuirAnoMesPorDias(self):
+        if self.dia < 1:
+            self.mes -= 1
+            self.disminuirAnoMes()
+            numeroDiasMesActual = self.__numeroDiasMes[self.mes]
+            self.dia += numeroDiasMesActual
+
+    def aumentarDiaHora(self):
+        if self.hora > 23:
+            self.hora -= 24
+            self.dia += 1
+
+    def disminuirDiaHora(self):
+        if self.hora < 0:
+            self.hora += 24
+            self.dia -= 1
+
+    def aumentarHoraMinutos(self):
+        if self.minutos > 59:
+            self.minutos -= 60
+            self.hora += 1
+
+    def disminuirHoraMinutos(self):
+        if self.minutos < 0:
+            self.minutos += 60
+            self.hora -= 1
+
     def sumarDias(self, numeroDias):
         fechaNueva = Fecha((self.ano, self.mes, self.dia,
                             self.hora, self.minutos, self.segundos))
@@ -102,13 +170,21 @@ class Fecha():
         while fechaNueva.dia > numeroDiasMesActual:
             fechaNueva.dia -= numeroDiasMesActual
             fechaNueva.mes += 1
-
-            if fechaNueva.mes > 12:
-                fechaNueva.mes  = 1
-                fechaNueva.ano += 1
-                fechaNueva.comprobarBisciesto()
-
+            fechaNueva.aumentarAnoMes()
             numeroDiasMesActual = fechaNueva.__numeroDiasMes[fechaNueva.mes]
+
+        return fechaNueva
+
+    def restarDias(self, numeroDias):
+        fechaNueva = Fecha((self.ano, self.mes, self.dia,
+                            self.hora, self.minutos, self.segundos))
+        fechaNueva.dia -= numeroDias
+
+        while fechaNueva.dia < 1:
+            fechaNueva.mes -= 1
+            fechaNueva.disminuirAnoMes()
+            numeroDiasMesActual = fechaNueva.__numeroDiasMes[fechaNueva.mes]
+            fechaNueva.dia += numeroDiasMesActual
 
         return fechaNueva
 
@@ -121,18 +197,21 @@ class Fecha():
         while fechaNueva.hora > 23:
             fechaNueva.hora -= 24
             fechaNueva.dia += 1
-
-            if fechaNueva.dia > numeroDiasMesActual:
-                fechaNueva.dia -= numeroDiasMesActual
-                fechaNueva.mes += 1
-
-                if fechaNueva.mes > 12:
-                    fechaNueva.mes = 1
-                    fechaNueva.ano += 1
-                    fechaNueva.comprobarBisciesto()
-
+            fechaNueva.aumentarMesDia(numeroDiasMesActual)
+            fechaNueva.aumentarAnoMes()
             numeroDiasMesActual = fechaNueva.__numeroDiasMes[fechaNueva.mes]
 
+        return fechaNueva
+
+    def restarHoras(self, numeroHoras):
+        fechaNueva = Fecha((self.ano, self.mes, self.dia,
+                            self.hora, self.minutos, self.segundos))
+        fechaNueva.hora -= numeroHoras
+
+        while fechaNueva.hora < 0:
+            fechaNueva.dia -= 1
+            fechaNueva.disminuirAnoMesPorDias()
+            fechaNueva.hora += 24
 
         return fechaNueva
 
@@ -145,21 +224,23 @@ class Fecha():
         while fechaNueva.minutos > 59:
             fechaNueva.minutos -= 60
             fechaNueva.hora += 1
+            fechaNueva.aumentarDiaHora()
+            fechaNueva.aumentarMesDia(numeroDiasMesActual)
+            fechaNueva.aumentarAnoMes()
+            numeroDiasMesActual = fechaNueva.__numeroDiasMes[fechaNueva.mes]
 
-            if fechaNueva.hora > 23:
-                fechaNueva.hora -= 24
-                fechaNueva.dia += 1
+        return fechaNueva
 
-                if fechaNueva.dia > numeroDiasMesActual:
-                    fechaNueva.dia -= numeroDiasMesActual
-                    fechaNueva.mes += 1
+    def restarMinutos(self, numeroMinutos):
+        fechaNueva = Fecha((self.ano, self.mes, self.dia,
+                            self.hora, self.minutos, self.segundos))
+        fechaNueva.minutos -= numeroMinutos
 
-                    if fechaNueva.mes > 12:
-                        fechaNueva.mes = 1
-                        fechaNueva.ano += 1
-                        fechaNueva.comprobarBisciesto()
-
-                numeroDiasMesActual = fechaNueva.__numeroDiasMes[fechaNueva.mes]
+        while fechaNueva.minutos < 0:
+            fechaNueva.hora -= 1
+            fechaNueva.disminuirDiaHora()
+            fechaNueva.disminuirAnoMesPorDias()
+            fechaNueva.minutos += 60
 
         return fechaNueva
 
@@ -172,25 +253,24 @@ class Fecha():
         while fechaNueva.segundos > 59:
             fechaNueva.segundos -= 60
             fechaNueva.minutos += 1
+            fechaNueva.aumentarHoraMinutos()
+            fechaNueva.aumentarDiaHora()
+            fechaNueva.aumentarMesDia(numeroDiasMesActual)
+            fechaNueva.aumentarAnoMes()
+            numeroDiasMesActual = fechaNueva.__numeroDiasMes[fechaNueva.mes]
 
-            if fechaNueva.minutos > 59:
-                fechaNueva.minutos -= 60
-                fechaNueva.hora += 1
+        return fechaNueva
 
-                if fechaNueva.hora > 23:
-                    fechaNueva.hora -= 24
-                    fechaNueva.dia += 1
+    def restarSegundos(self, numeroSegundos):
+        fechaNueva = Fecha((self.ano, self.mes, self.dia,
+                            self.hora, self.minutos, self.segundos))
+        fechaNueva.segundos -= numeroSegundos
 
-                    if fechaNueva.dia > numeroDiasMesActual:
-                        fechaNueva.dia -= numeroDiasMesActual
-                        fechaNueva.mes += 1
-
-                        if fechaNueva.mes > 12:
-                            fechaNueva.mes = 1
-                            fechaNueva.ano += 1
-                            fechaNueva.comprobarBisciesto()
-
-                    numeroDiasMesActual = fechaNueva.__numeroDiasMes[fechaNueva.mes]
-
+        while fechaNueva.segundos < 0:
+            fechaNueva.minutos -= 1
+            fechaNueva.disminuirHoraMinutos()
+            fechaNueva.disminuirDiaHora()
+            fechaNueva.disminuirAnoMesPorDias()
+            fechaNueva.segundos += 60
 
         return fechaNueva
