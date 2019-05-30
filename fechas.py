@@ -368,6 +368,12 @@ class Fecha():
 
         return diferencia
 
+    def __str__(self):
+        fecha = (self.ano, self.mes, self.dia,
+                 self.hora, self.minutos, self.segundos)
+
+        return str(fecha)
+
 class Hoy(Fecha):
 
     def __init__(self):

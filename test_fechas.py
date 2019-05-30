@@ -591,3 +591,11 @@ class PruebasFechas(unittest.TestCase):
         except NameError:
             raise AssertionError("La clase hoy no esta definida")
         return True
+
+    def test_imprimir_objeto(self):
+        fecha = fechas.Fecha((2019, 5, 30, 8, 30, 50))
+        try:
+            print(fecha)
+        except:
+            raise AssertionError("No se ha implementado el metodo imprimir")
+        return True
