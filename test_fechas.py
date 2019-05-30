@@ -591,7 +591,3 @@ class PruebasFechas(unittest.TestCase):
         except NameError:
             raise AssertionError("La clase hoy no esta definida")
         return True
-
-if __name__=='__main__':
-    unittest.main()
-    #print(fechaNueva.ano, fechaNueva.mes, fechaNueva.dia, fechaNueva.hora, fechaNueva.minutos, fechaNueva.segundos)
