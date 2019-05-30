@@ -337,6 +337,50 @@ class Fecha():
 
         fechaNueva = fechaInicial.sumarDias(distanciaDias)
         distanciaDias += fechaFinal.dia - fechaNueva.dia
-        #fechaNueva = fechaInicial.sumarDias(distanciaDias)
 
         return distanciaDias
+
+    def __sub__(self, otraFecha):
+
+        if self.esMasReciente(otraFecha):
+            fechaInicial = Fecha((otraFecha.ano, otraFecha.mes, otraFecha.dia,
+                        otraFecha.hora, otraFecha.minutos, otraFecha.segundos))
+            fechaFinal = Fecha((self.ano, self.mes, self.dia,
+                                self.hora, self.minutos, self.segundos))
+        else:
+            fechaInicial = Fecha((self.ano, self.mes, self.dia,
+                                  self.hora, self.minutos, self.segundos))
+            fechaFinal = Fecha((otraFecha.ano, otraFecha.mes, otraFecha.dia,
+                        otraFecha.hora, otraFecha.minutos, otraFecha.segundos))
+
+        anos = abs(fechaInicial.ano - fechaFinal.ano)
+        if fechaInicial.mes > fechaFinal.mes:
+            anos -= 1
+            meses = 12 - fechaInicial.mes + fechaFinal.mes
+        else:
+            meses = abs(fechaInicial.mes - fechaFinal.mes)
+        dias = abs(fechaInicial.dia - fechaFinal.dia)
+        horas = abs(fechaInicial.hora - fechaFinal.hora)
+        minutos = abs(fechaInicial.minutos - fechaFinal.minutos)
+        segundos = abs(fechaInicial.segundos - fechaFinal.segundos)
+
+        diferencia = Fecha((anos, meses, dias, horas, minutos, segundos))
+
+        return diferencia
+
+class Hoy(Fecha):
+
+    def __init__(self):
+        from time import gmtime, strftime
+
+        hoyCadena = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+
+        self.ano = int(hoyCadena[:4])
+        self.mes = int(hoyCadena[5:7])
+        self.dia = int(hoyCadena[8:10])
+        self.hora = int(hoyCadena[11:13])
+        self.minutos = int(hoyCadena[14:16])
+        self.segundos = int(hoyCadena[17:])
+
+        Fecha.__init__(self, (self.ano, self.mes, self.dia,
+                       self.hora, self.minutos, self.segundos))

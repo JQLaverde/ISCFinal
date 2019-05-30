@@ -567,6 +567,31 @@ class PruebasFechas(unittest.TestCase):
         distanciaDias = fechaInicial.calcularDistanciaEnDias(fechaFinal)
         self.assertEqual(distanciaDias, 185)
 
+    def test_restar_fechas(self):
+        fechaFinal = fechas.Fecha((2020, 8, 16, 12, 3, 5))
+        fechaInicial = fechas.Fecha((2019, 5, 29, 21, 9, 0))
+        restaFechas = fechaFinal - fechaInicial
+        self.assertEqual(restaFechas, fechas.Fecha((1, 3, 13, 9, 6, 5)))
+
+    def test_restar_fechas_diferente_orden(self):
+        fechaInicial = fechas.Fecha((2020, 8, 16, 12, 3, 5))
+        fechaFinal = fechas.Fecha((2019, 5, 29, 21, 9, 0))
+        restaFechas = fechaFinal - fechaInicial
+        self.assertEqual(restaFechas, fechas.Fecha((1, 3, 13, 9, 6, 5)))
+
+    def test_restar_fechas_meses_desfase(self):
+        fechaInicial = fechas.Fecha((1998, 8, 16, 12, 3, 5))
+        fechaFinal = fechas.Fecha((2019, 5, 29, 21, 9, 0))
+        restaFechas = fechaFinal - fechaInicial
+        self.assertEqual(restaFechas, fechas.Fecha((20, 9, 13, 9, 6, 5)))
+
+    def test_instanciado_clase_hoy(self):
+        try:
+            fechas.Hoy()
+        except NameError:
+            raise AssertionError("La clase hoy no esta definida")
+        return True
+
 if __name__=='__main__':
     unittest.main()
     #print(fechaNueva.ano, fechaNueva.mes, fechaNueva.dia, fechaNueva.hora, fechaNueva.minutos, fechaNueva.segundos)
