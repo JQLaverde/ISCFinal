@@ -1,8 +1,9 @@
 # Modulo para el manejo de fechas en español para Python
 
-El modulo en este repositorio esta diseñado para el manejo de fechas en python, con un minimo de funcionalidades para su uso facil y rapido. Este modulo esta en idioma español y la manera de usarlo, es la siguiente
+El módulo en este repositorio está diseñado para el manejo de fechas en python, con un mínimo de funcionalidades para su uso facil y rapido. Este modulo esta en idioma español y la manera de usarlo, es la siguiente
 
-Para descargar, basta con clonar este repositorio en la carpeta de tu proyecto, no incluye dependencias fuera del python, asi
+Para descargar, basta con clonar este repositorio en la carpeta de tu proyecto, no incluye dependencias fuera del python, así
+
 ```
 ➜  git clone https://github.com/JQLaverde/ISCFinal.git
 ```
@@ -22,7 +23,7 @@ print(fecha)
 
 ### Funcionalidad suma y resta de cantidades de tiempo
 
-Si tienes una fecha y deseas restar ya sean años, meses, dias, horas, minutos o segundos, basta con simplemente declarar tu objeto fecha y llamar al metodo sumar o restar de alguno de los items anteriormente mencionados, estos metodos retornar otro objeto de la clase Fecha con la suma o resta realizada, ejemplo: Si deseamos sumar o restar años
+Si tienes una fecha y deseas restar ya sean años, meses, días, horas, minutos o segundos, basta con simplemente declarar tu objeto fecha y llamar al método sumar o restar de alguno de los ítems anteriormente mencionados, estos métodos retornar otro objeto de la clase Fecha con la suma o resta realizada, ejemplo: Si deseamos sumar o restar años
 
 ```python
 import fechas
@@ -42,7 +43,7 @@ print(fechaRestaAnos)
 ```
 ### Funcionalidad distancia en dias entre dos fechas
 
-Esta funcionalidad te permite saber cuantos dias transcurrieron entre una fecha y otra, retorna un entero con este dato
+Esta funcionalidad te permite saber cuantos días transcurrieron entre una fecha y otra, retorna un entero con este dato
 
 ```python
 import fechas
@@ -61,7 +62,7 @@ print(distanciaEnDias)
 
 ### Funcionalidad restar fechas
 
-Es posible con este modulo, restar dos fechas, simplemente con el simbolo '-', lo cual retorna un objeto de la clase Fecha con la informacion de los anos, meses, dias, horas, minutos y segundos que separan a esas dos fechas
+Es posible con este módulo, restar dos fechas, simplemente con el símbolo '-', lo cual retorna un objeto de la clase Fecha con la información de los años, meses, días, horas, minutos y segundos que separan a esas dos fechas
 
 ```python
 import fechas
@@ -80,7 +81,7 @@ print(restaFechas)
 
 ### Funcionalidad instanciar objeto Hoy
 
-Con este paquete, se puede instanciar un objeto llamado Hoy que tiene los mismos metodos y atributos que los objetos de la clase Fecha, solo que para este, no es necesario pasarle los atributos, ya que al instanciarlo, estos se cargan con los datos de la fecha y hora actual
+Con este paquete, se puede instanciar un objeto llamado Hoy que tiene los mismos métodos y atributos que los objetos de la clase Fecha, solo que para este, no es necesario pasarle los atributos, ya que al instanciarlo, estos se cargan con los datos de la fecha y hora actual
 
 ```python
 import fechas
