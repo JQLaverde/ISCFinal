@@ -274,3 +274,69 @@ class Fecha():
             fechaNueva.segundos += 60
 
         return fechaNueva
+
+    def esMasReciente(self, otraFecha):
+        if self.ano > otraFecha.ano:
+            return True
+        elif self.ano == otraFecha.ano:
+            if self.mes > otraFecha.mes:
+                return True
+            elif self.mes == otraFecha.mes:
+                if self.dia > otraFecha.dia:
+                    return True
+                elif self.dia == otraFecha.dia:
+                    if self.hora > otraFecha.hora:
+                        return True
+                    elif self.hora == otraFecha.hora:
+                        if self.minutos > otraFecha.minutos:
+                            return True
+                        elif self.minutos == otraFecha.minutos:
+                            if self.segundos > otraFecha.segundos:
+                                return True
+                            elif self.segundos == otraFecha.segundos:
+                                return False
+        return False
+
+
+    def calcularDistanciaEnDias(self, otraFecha):
+        numeroDiasMes = [None, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+        if self.esMasReciente(otraFecha):
+            fechaInicial = Fecha((otraFecha.ano, otraFecha.mes, otraFecha.dia))
+            fechaFinal = Fecha((self.ano, self.mes, self.dia))
+        else:
+            fechaInicial = Fecha((self.ano, self.mes, self.dia))
+            fechaFinal = Fecha((otraFecha.ano, otraFecha.mes, otraFecha.dia))
+
+        if fechaInicial == fechaFinal:
+            return 0
+
+        diferenciaAnos = abs(fechaInicial.ano - fechaFinal.ano)
+        if fechaInicial.mes > fechaFinal.mes:
+            diferenciaAnos -= 1
+
+        anosBisciestos = 0
+        for ano in range(fechaInicial.ano, fechaInicial.ano + diferenciaAnos):
+            if Fecha((ano, 1, 1)).comprobarBisciesto():
+                anosBisciestos += 1
+
+        distanciaDias = diferenciaAnos*365 + anosBisciestos + \
+                        numeroDiasMes[fechaInicial.mes] - fechaInicial.dia + 1
+        fechaNueva = fechaInicial.sumarDias(distanciaDias)
+
+        if fechaInicial.mes > fechaFinal.mes:
+            for mes in range(fechaNueva.mes, 13):
+                distanciaDias += numeroDiasMes[mes]
+
+            for mes in range(1, fechaFinal.mes):
+                distanciaDias += numeroDiasMes[mes]
+
+        else:
+            for mes in range(fechaNueva.mes, fechaFinal.mes):
+                distanciaDias += numeroDiasMes[mes]
+
+        fechaNueva = fechaInicial.sumarDias(distanciaDias)
+        distanciaDias += fechaFinal.dia - fechaNueva.dia
+        #fechaNueva = fechaInicial.sumarDias(distanciaDias)
+
+        return distanciaDias

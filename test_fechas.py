@@ -509,6 +509,63 @@ class PruebasFechas(unittest.TestCase):
         fechaNueva = fecha.restarSegundos(5616001)
         self.assertTrue(fechaNueva == fechas.Fecha((2019, 12, 27)))
 
+    def test_es_mas_reciente_ano(self):
+        fechaInicial = fechas.Fecha((2019, 5, 29))
+        fechaFinal = fechas.Fecha((2020, 3, 30))
+        self.assertTrue(fechaFinal.esMasReciente(fechaInicial))
+
+    def test_es_mas_reciente_mes(self):
+        fechaInicial = fechas.Fecha((2019, 5, 29))
+        fechaFinal = fechas.Fecha((2019, 8, 30))
+        self.assertTrue(fechaFinal.esMasReciente(fechaInicial))
+
+    def test_es_mas_reciente_dia(self):
+        fechaInicial = fechas.Fecha((2019, 5, 29))
+        fechaFinal = fechas.Fecha((2019, 5, 30))
+        self.assertTrue(fechaFinal.esMasReciente(fechaInicial))
+
+    def test_es_mas_reciente_hora(self):
+        fechaInicial = fechas.Fecha((2019, 5, 29, 13, 13, 10))
+        fechaFinal = fechas.Fecha((2019, 5, 29, 15, 13, 10))
+        self.assertTrue(fechaFinal.esMasReciente(fechaInicial))
+
+    def test_es_mas_reciente_minutos(self):
+        fechaInicial = fechas.Fecha((2019, 5, 29, 15, 13, 10))
+        fechaFinal = fechas.Fecha((2019, 5, 29, 15, 18, 10))
+        self.assertTrue(fechaFinal.esMasReciente(fechaInicial))
+
+    def test_es_mas_reciente_segundos(self):
+        fechaInicial = fechas.Fecha((2019, 5, 29, 15, 18, 9))
+        fechaFinal = fechas.Fecha((2019, 5, 29, 15, 18, 10))
+        self.assertTrue(fechaFinal.esMasReciente(fechaInicial))
+
+    def test_es_mas_reciente_fechas_iguales(self):
+        fechaInicial = fechas.Fecha((2019, 5, 29, 15, 18, 10))
+        fechaFinal = fechas.Fecha((2019, 5, 29, 15, 18, 10))
+        self.assertFalse(fechaFinal.esMasReciente(fechaInicial))
+
+    def test_distancia_dias_entre_fechas(self):
+        fechaInicial = fechas.Fecha((2019, 5, 29))
+        fechaFinal = fechas.Fecha((2019, 11, 30))
+        distanciaDias = fechaInicial.calcularDistanciaEnDias(fechaFinal)
+        self.assertEqual(distanciaDias, 185)
+
+    def test_distancia_dias_entre_fechas_ano_desfase(self):
+        fechaInicial = fechas.Fecha((1998, 8, 16))
+        fechaFinal = fechas.Fecha((2019, 5, 29))
+        distanciaDias = fechaInicial.calcularDistanciaEnDias(fechaFinal)
+        self.assertEqual(distanciaDias, 7590)
+
+    def test_distancia_dias_fechas_iguales(self):
+        fechaInicial = fechas.Fecha((2019, 5, 29))
+        fechaFinal = fechas.Fecha((2019, 5, 29))
+        self.assertEqual(fechaInicial.calcularDistanciaEnDias(fechaFinal), 0)
+
+    def test_distancia_dias_fechas_cambiar_orden(self):
+        fechaInicial = fechas.Fecha((2019, 11, 30))
+        fechaFinal = fechas.Fecha((2019, 5, 29))
+        distanciaDias = fechaInicial.calcularDistanciaEnDias(fechaFinal)
+        self.assertEqual(distanciaDias, 185)
 
 if __name__=='__main__':
     unittest.main()
